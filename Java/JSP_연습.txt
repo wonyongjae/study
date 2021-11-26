@@ -1,0 +1,219 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ page import="java.sql.ResultSet" %>
+	<%@ page import="java.sql.PreparedStatement"%>
+	<%@ page import="java.sql.Connection"%>
+	<%@ page import="java.sql.DriverManager"%>
+	 <%@ page import ="BoardWeb.LoginUser" %>
+	 <%@ page import ="BoardWeb.util.PagingUtil"%>
+	
+<% 
+	LoginUser loginUser = (LoginUser)session.getAttribute("loginUser");
+
+	request.setCharacterEncoding("UTF-8");
+	
+	
+	//현재 페이지 파라미터 얻어오기
+	String nowPageStr = (String)request.getParameter("nowPage");
+	if(nowPageStr == null){
+		nowPageStr="1";
+	}
+	
+	//화면에서의 게시글 갯수
+	int perPage = 5;
+	
+
+	String searchType = (String)request.getParameter("searchType");
+	String searchValue = (String)request.getParameter("searchValue");
+	
+	if(searchType==null){
+		searchType="";
+	}
+	if(searchValue==null){
+		searchValue="";
+	}
+		
+	//String searchType = (String)request.getParameter("title");
+	//String searchTitle = (String)request.getParameter("title");
+    //db연결후 board 테이블 데이터 목록 가져오기
+    Connection conn = null;
+	PreparedStatement psmt = null;
+	ResultSet rs = null;
+	
+	String url = "jdbc:oracle:thin:@localhost:1521:xe";
+	String user = "aclass";
+	String pass = "aclass";
+
+	Class.forName("oracle.jdbc.driver.OracleDriver");
+	conn = DriverManager.getConnection(url,user,pass);
+	
+	
+	String  totalSql = "select count(*) as cnt ";
+	   		totalSql += "	from board";
+		
+			if(searchValue != null && searchValue.equals("")){
+				if(searchType.equals("btitle")){
+					totalSql +=	"	where btitle like '%"+searchValue+"%'";	
+				}else if(searchType.equals("bdate")){		
+					totalSql +=	"	where bdate like '%"+searchValue+"%'";			
+				}else if(searchType.equals("bno")){		
+					totalSql +=	"	where bno="+searchValue;	
+				}
+			}
+		
+		
+	psmt = conn.prepareStatement(totalSql);
+	rs = psmt.executeQuery();
+	
+	int total = 0;
+	if(rs.next()){
+		total = rs.getInt("cnt");
+	}
+	PagingUtil paging = new PagingUtil(total, Integer.parseInt(nowPageStr), perPage);
+	
+	System.out.println("게시글 총 갯수 ->" +total);
+	
+	psmt = null;
+	rs = null;
+	
+	
+	String 	sql = "";
+			sql += "select B.* from ";
+			sql += "(select rownum as rnum, A.* from ";
+			sql += "(select bno, btitle, to_char(bdate,'yyyy-mm-dd') as bdate";
+			sql += "	from board";
+			
+			if(searchValue != null && searchValue.equals("")){
+				if(searchType.equals("btitle")){
+					sql +=	"	where btitle like '%"+searchValue+"%'";	
+				}else if(searchType.equals("bdate")){		
+					sql +=	"	where bdate like '%"+searchValue+"%'";			
+				}else if(searchType.equals("bno")){		
+					sql +=	"	where bno="+searchValue;	
+				}
+			}
+			
+				sql += "	order by bno) A";  // select * from board;
+				sql += "	where rownum <= "+paging.getEnd() +") B";
+				sql += "	where B.rnum >= "+paging.getStart();
+			
+	psmt = conn.prepareStatement(sql);
+	rs = psmt.executeQuery();
+	
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script>
+	
+	function goWrite(){
+		var login= '<%= loginUser%>';
+		if(login != 'null'){
+			location.href='write.jsp'
+		}else{
+			alert("로그인을 해주세요!");
+			
+		}
+	}
+</script>
+</head>
+<body>
+
+
+	<h2>Board 테이블 목록 출력하기</h2>
+	<form action="list.jsp" method="get">
+	검색 : 
+		<select name="searchType">
+			<option value="bno" <%if(searchType.equals("bno")){%>selected<%} %>>순번</option>
+			<option value="btitle" <%if(searchType.equals("title")){%>selected<%} %>>>제목</option>
+			<option value="bdate" <%if(searchType.equals("date")){%>selected<%} %>>작성일</option>
+		</select>
+	<%if(searchValue != null && searchValue.equals("")){ %>
+	<input type="text" name="searchValue" value="<%= searchValue%>">
+	<% }else{%>
+	<input type="text" name="searchValue">
+	<% }%>
+	<input type="submit" value="검색">
+	</form>
+	
+	<br>
+	<table border="1">
+		<tr>
+			<th>순번</th>
+			<th>제목</th>
+			<th>작성일</th>
+		</tr>
+		
+		<% 
+			while(rs.next()){
+				String title = rs.getString("btitle");
+				String wdate = rs.getString("bdate");
+				int bno = rs.getInt("bno");
+				
+		%>
+		
+		<tr>
+			<th><%= bno%></th>
+			<td><a href="detail.jsp?bno=<%= bno %>&nowPage=<%= nowPageStr%>&searchType=<%= searchType%>&searchValue=<%= searchValue%>"><%= title%></a></td>
+			<td><%= wdate%></td>
+		</tr>
+		
+		
+		<%
+			}
+			
+			conn.close();
+			psmt.close();
+			rs.close();
+		%>
+	</table>
+	<% 
+		if(paging.getStartPage() > 1){
+	%>
+			
+				<a href="list.jsp?nowPage=<%= paging.getStartPage()-1%>&searchType=<%= searchType%>&searchValue=<%= searchValue%>">&lt;</a>
+			
+			
+	<% 
+			
+			
+		}
+		for(int i=paging.getStartPage(); i<=paging.getEndPage(); i++){
+			if(i == paging.getNowPage()){
+	%>
+				
+				<b> <%= i %> </b>
+				
+	<% 
+			}else{
+	%>
+						<a href="list.jsp?nowPage=<%= i%>&searchType=<%= searchType%>&searchValue=<%= searchValue%>"><%= i %></a>
+	<% 
+				
+			}
+			
+		}
+	
+		if(paging.getEndPage() != paging.getLastPage()){
+	%>
+			
+				<a href="list.jsp?nowPage=<%= paging.getEndPage()+1%>&searchType=<%= searchType%>&searchValue=<%= searchValue%>">&gt;</a>
+			
+	<%
+			
+		}
+		
+	%>
+
+	<br>
+	<%-- if(loginUser != null) {--%>
+	<button onclick="goWrite();">등록</button>
+	<%-- }else{ }--%>
+	<button onclick="location.href='/BoardWeb/'">초기화면</button>
+</body>
+</html>
+
+
+

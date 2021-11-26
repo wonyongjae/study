@@ -1,0 +1,57 @@
+create table topic(
+	SEQ_topic.nextval,
+	title varchar2(50) not null,
+	description varchar2(4000),
+	created date not null,
+	constraint pk_topic primary key (id)
+);
+
+insert into topic(id,title,description,created)values(
+	SEQ_topic.nextval,
+	'oracle',
+	'oracle is..',
+	sysdate
+);
+
+insert into topic(id,title,description,created)values(
+	SEQ_topic.nextval,
+	'mysql',
+	'mysql is..',
+	sysdate
+);
+
+
+insert into topic(id,title,description,created)values(
+	SEQ_topic.nextval,
+	'msssql',
+	'msssql is..',
+	sysdate
+);
+
+ select * from topic offset 0 rows fetch next 1 rows only;
+ 몇 다음으로 몇개까지 가져오겠다?
+
+offset "" rows fetch next "" rows only;
+
+create sequence SEQ_topic;
+
+insert into topic(id,title,description,created)values(
+	SEQ_topic.nextval,
+	'mongoDB',
+	'mongoDB is..',
+	sysdate
+);
+
+create sequence SEQ_author;
+
+create table author (
+	id number,
+	name varchar2(20),
+	profile varchar2(50)
+);
+
+insert into author(id,name,profile)values(
+	SEQ_author.nextval,
+	'teahp',
+	'data scientist'
+);

@@ -1,0 +1,142 @@
+
+
+SQL에서의 if 문 case... when .... then ... else .... end
+
+case 뒤에는 비교할 필드
+when 뒤에는 조건
+then 뒤에는 조건에 해당할 때 값
+else 조건에 해당하지 않을 때 값
+end 는 case 문의 종료
+조건이 추가될 때마다 when, then 추가
+
+----
+
+조인
+
+inner join 
+-	두개의 테이블에서 조건이 일치하는 데이터를 조회
+-	조건이 일치하는 데이터만 조회해오므로 on에 있는 
+	조건이 일치하지 않는데이터는 조회할 수 없다.
+ex) 게시글 테이블에서 작성자번호가 일치하는 회원 테이블의 회원번호의 데이터를 조회해올때 사용
+ex)	elect bno, wtitle, name, to_char(upload, 'YYYY-MM-DD') as upload from board 
+	inner join membertbl on board.wno = membertbl.memberno;
+
+outer join
+-	outer join은 기준이 되는 테이블은전체의 데이터를 조회해오고 기준이 되지 않는 
+	테이블에 대해서는조건에 일치하는 데이터만 가져오고 그렇지 않으면 가져오지 않는다.
+-left join
+
+-right join
+
+--------------------------------------------
+
+union
+-	두개의 테이블 데이터를 합쳐서 조회해 올 때 사용
+-	select 되는 필드의 순서 타입이 일치하면 데이터를 합쳐서 한번에 조회해 올  수 있다.
+
+ex) 
+ select '원용재' as aname, 20 as aage from dual union select '자동차' as pname, 5000 as pprice from dual;
+
+ANAME                    AAGE
+------------------ ----------
+원용재                     20
+자동차                   5000
+
+
+---------------------------------------
+
+
+
+
+
+
+
+
+제약조건
+
+-기본키( primary key ) 제약조건 / not null, unique, 
+	기본키를 이용하여 데이터의 무결성을 유지하는 제약 조건
+	기본키가 중복되면 중복데이터로 인식되어 테이블에 insert 될 수 없다.
+	primary key 명령어를 이용하여 선언한다.
+	기본키는 하나여야하지만 기본키가 될 수 있는 필드는 여러 개 올 수 있똬
+
+-외래키( foreign key ) 제약조건 / not null
+	현재 테이블에서 다른 테이블과의 관계를 맺어주는 키
+	반드시 다른 테이블에 존재하는 데이터만 현재 테이블에 추가 될 수 있다.
+	상위 테이블(다른 테이블) 의 데이터를 삭제한 후 현재 테이블의 데이터를 삭제 할 수 있다.
+
+-unique 제약조건 / 
+	값이 유일하도록 해주는 제약조건
+	기본키는 아니지만 값이 유일해야하는 경우 선언해주는 제약조건
+
+-check 제약조건 /
+	값(데이터)를 검증하는 제약조건
+	해당 제약조건에 검증할 조건을 추가하여 check가 걸린 필드에 데이터가 들어올때 조건 검증을 하는 제약조건
+
+	ex) check (phone1 in('010', '011', '016'))	 / 	데이터가 insert 될 때 phone1의 데이터는 010,011,016만 들어올 수 있다.
+	
+
+-default 정의
+	테이블에 데이터가 insert 되는 경우 초기값 대입
+
+	ex) create table board	( bno number not null primary key, bhit number default 0 not null ); 
+
+
+
+
+
+-----------------------------------------
+
+view  가상 테이블
+	create view (view명) as select
+
+create view boardv as select bno ,wtitle ,name,to_char(bdate,'YYYY-MM-DD') as from membertbl on board.wno = membertbl.memberno;
+
+
+
+--총갯수 totalpage->100
+select select count(*) from board;
+
+-- 메뉴를 통해서 게시글에 들어온경우 현재페이지 nowpage  -> 1   
+-- 한 화면당 보여질 게시글수 perpage-->5
+--한 화면당 보여질 페이징 수 cntpage-->10
+
+-- 마지막페이지 계산 (맨 마지막 페이징 번호)
+
+	(int)Math.ceil((double) totalpage / perpage)
+
+
+-- 한 화면의 페이지 종료 번호  - endpage
+
+	((int)Math.ceil((double) nowpage / cntpage))*cntpage
+
+
+--한 화면의 페이지 시작 번호 
+
+	(endpage-cntpage)+1
+
+-- 한 화면의 게시글 종료 번호 (end)
+
+	nowpage*perpage
+
+--한 화면의 게시글 시작 번호
+
+	(end-perpage)+1
+
+
+--oracle 에서 데이터 페이징 쿼리
+
+	select B.* from
+		(select rownum as rnum, A.*
+	from (select * from Board order by bno) A
+		where rownum <= 마지막 글번호) B
+	where B.rnum >= 시작 글번호
+
+
+	select B.* from
+		(select rownum as rnum, A.*
+	from (select * from Board order by bno) A
+		where rownum <= 5) B
+	where B.rnum >= 1;
+
+
