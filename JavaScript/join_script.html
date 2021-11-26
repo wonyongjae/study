@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>와이어프레임 실습</title>
+		<meta charset = "UTF-8">
+		<script>
+			function checkFn(type){
+				if(type == 'id'){
+					var checkId = /^[a-z]+[a-z0-9]{5,15}/g;
+					var value = document.frm.id.value;
+					var span = document.getElementsByClassName("id")[0].getElementsByTagName("span")[0];
+					if(value == ""){
+						span.textContent = "*필수";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else if(!checkId.test(value)){
+						span.textContent = "*형식오류";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else{
+						span.textContent = "";
+						span.style.display = "none";
+					}
+				}else if(type == 'pass'){
+					var checkId = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+					var value = document.frm.password.value;
+					var span = document.getElementsByClassName("password")[0].getElementsByTagName("span")[0];
+					if(value == ""){
+						span.textContent = "*필수";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else if(!checkId.test(value)){
+						span.textContent = "*형식오류";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else{
+						span.textContent = "";
+						span.style.display = "none";
+					}
+				}else if(type == 'passre'){
+					var value = document.frm.password.value;
+					var value2 = document.frm.passwordre.value;
+					var span = document.getElementsByClassName("passwordre")[0].getElementsByTagName("span")[0];
+					if(value2 == ""){
+						span.textContent = "*필수";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else if(value != value2){
+						span.textContent = "*비밀번호 불일치";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else{
+						span.textContent = "";
+						span.style.display = "none";
+					}
+				}else if(type == 'name'){
+					var checkName = /^[가-힣]/g;
+					var value = document.frm.name.value;
+					var span = document.getElementsByClassName("name")[0].getElementsByTagName("span")[0];
+					if(value == ""){
+						span.textContent = "*필수";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else if(!checkName.test(value)){
+						span.textContent = "*형식오류";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else{
+						span.textContent = "";
+						span.style.display = "none";
+					}
+				}else if(type == 'email'){
+					var checkEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/g;
+					var value = document.frm.email.value;
+					var span = document.getElementsByClassName("email")[0].getElementsByTagName("span")[0];
+					if(value == ""){
+						span.textContent = "*필수";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else if(!checkEmail.test(value)){
+						span.textContent = "*형식오류";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else{
+						span.textContent = "";
+						span.style.display = "none";
+					}
+				}else if(type == 'phone2'){
+					var checkPhone2 = /^[0-9]{3,4}/g;
+					var value = document.frm.phone2.value;
+					var span = document.getElementsByClassName("phone")[0].getElementsByTagName("span")[0];
+					if(value == ""){
+						span.textContent = "*필수";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else if(!checkPhone2.test(value)){
+						span.textContent = "*형식오류";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else{
+						span.textContent = "";
+						span.style.display = "none";
+					}
+				}else if(type == 'phone3'){
+					var checkPhone2 = /^[0-9]{4}/g;
+					var value = document.frm.phone3.value;
+					var span = document.getElementsByClassName("phone")[0].getElementsByTagName("span")[0];
+					if(value == ""){
+						span.textContent = "*필수";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else if(!checkPhone2.test(value)){
+						span.textContent = "*형식오류";
+						span.style.color = "red";
+						span.style.display = "inline";
+					}else{
+						span.textContent = "";
+						span.style.display = "none";
+					}
+				}
+			}
+			
+			function sumbitFn(){
+				var result = true;
+				var checkId = /^[a-z]+[a-z0-9]{5,15}/g;
+				var value = document.frm.id.value;
+				var span = document.getElementsByClassName("id")[0].getElementsByTagName("span")[0];
+				if(value == ""){
+					span.textContent = "*필수";
+					span.style.color = "red";
+					span.style.display = "inline";
+					 result = false;
+				}else if(!checkId.test(value)){
+					span.textContent = "*형식오류";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else{
+					span.textContent = "";
+					span.style.display = "none";
+				}
+				
+				
+				var checkPass = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+				value = document.frm.password.value;
+				span = document.getElementsByClassName("password")[0].getElementsByTagName("span")[0];
+				if(value == ""){
+					span.textContent = "*필수";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else if(!checkPass.test(value)){
+					span.textContent = "*형식오류";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else{
+					span.textContent = "";
+					span.style.display = "none";
+				}
+				
+				
+				value = document.frm.password.value;
+				var value2 = document.frm.passwordre.value;
+				span = document.getElementsByClassName("passwordre")[0].getElementsByTagName("span")[0];
+				if(value2 == ""){
+					span.textContent = "*필수";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else if(value != value2){
+					span.textContent = "*비밀번호 불일치";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else{
+					span.textContent = "";
+					span.style.display = "none";
+				}
+				
+				
+				var checkName = /^[가-힣]/g;
+				value = document.frm.name.value;
+				span = document.getElementsByClassName("name")[0].getElementsByTagName("span")[0];
+				if(value == ""){
+					span.textContent = "*필수";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else if(!checkName.test(value)){
+					span.textContent = "*형식오류";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else{
+					span.textContent = "";
+					span.style.display = "none";
+				}
+				
+				
+				var checkEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/g;
+				value = document.frm.email.value;
+				span = document.getElementsByClassName("email")[0].getElementsByTagName("span")[0];
+				if(value == ""){
+					span.textContent = "*필수";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else if(!checkEmail.test(value)){
+					span.textContent = "*형식오류";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else{
+					span.textContent = "";
+					span.style.display = "none";
+				}
+				
+				
+				var checkPhone2 = /^[0-9]{3,4}/g;
+				value = document.frm.phone2.value;
+				span = document.getElementsByClassName("phone")[0].getElementsByTagName("span")[0];
+				if(value == ""){
+					span.textContent = "*필수";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else if(!checkPhone2.test(value)){
+					span.textContent = "*형식오류";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else{
+					span.textContent = "";
+					span.style.display = "none";
+				}
+				
+				
+				var checkPhone3 = /^[0-9]{4}/g;
+				value = document.frm.phone3.value;
+				span = document.getElementsByClassName("phone")[0].getElementsByTagName("span")[0];
+				if(value == ""){
+					span.textContent = "*필수";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else if(!checkPhone3.test(value)){
+					span.textContent = "*형식오류";
+					span.style.color = "red";
+					span.style.display = "inline";
+					result = false;
+				}else{
+					span.textContent = "";
+					span.style.display = "none";
+				}
+				
+				if(result){
+					document.frm.submit();
+				}
+			}
+		</script>
+		<style>
+			body{
+				margin:0px;
+				background:#FAFAFA;
+				font-family:Arial, "돋움", dotum, sans-serif;
+			}
+			section{
+				width:500px;
+				height:680px;
+				background:white;
+				text-align:center;
+				margin:10vh auto;
+				border:1px solid black;
+				border-radius:5px;
+			}
+			form{
+				width:55%;
+				height:100%;
+				margin:auto;
+			}
+			.header{
+				font-size:30px;
+				padding:10px 0px;
+				cursor:pointer;
+			}
+			.header:first-letter{
+				font-weight:bold;
+				color:red;
+			}
+			input{
+				height:30px;
+				width:267px;
+			}
+			input[type=submit]{
+				width:100%;
+				height:40px;
+				padding:0px;
+			}
+			.rows{
+				width:100%;
+				text-align:left;
+			}
+			.rows:not(.h){
+				padding-bottom:15px;
+			}
+			div.id{
+				text-align:left;
+			}
+			input[type=text].id{
+				width:177px;
+			}
+			input[type=button].id{
+				width:85px;
+				height:36px;
+				maign-top:2px;
+				margin-bottom:0px;
+			}
+			.birth{
+				width:80px;
+			}
+			.birth2{
+				width:80px;
+				height:37px;
+			}
+			input[type=radio]{
+				width:30px;
+				height:inherit;
+			}
+			#phone1{
+				width:80px;
+				height:35px;
+			}
+			#phone2, #phone3{
+				width:80px;
+				height:30px;
+			}
+			.red{
+				color:red;
+			}
+			.check{
+				display:none;
+				margin:10px;
+				position:absolute;
+				height:30px;
+				font-size:9pt;
+			}
+		</style>
+	</head>
+	<body>
+		<section>
+			<form name="frm" action="#" method="post">
+				<div class="header">Join</div>
+				<div class="rows h">
+					<label for="id">아이디<span class="red">*</span></label>
+				</div>
+				<div class="rows id">
+					<input type="text" class="id impor" name="id" id="id" placeholder="아이디를 입력하세요." onblur="checkFn('id')">
+					<input type="button" class="id" value="id 중복확인">
+					<span class="check"></span>
+				</div>
+				<div class="rows h">
+					<label for="password">비밀번호<span class="red">*</span></label>
+				</div>
+				
+				<div class="rows password">
+					<input type="password" class="impor" name="password" id="password" placeholder="비밀번호를 입력하세요." onblur="checkFn('pass')">
+					<span class="check"></span>
+				</div>
+				<div class="rows h">
+					<label for="passwordre">비밀번호 확인<span class="red">*</span></label>
+				</div>
+				<div class="rows passwordre">
+					<input type="password" class="impor" name="passwordre" id="passwordre" placeholder="비밀번호를 다시 입력하세요." onblur="checkFn('passre')">
+					<span class="check"></span>
+				</div>
+				<div class="rows h">
+					<label for="name">이름<span class="red">*</span></label>
+				</div>
+				<div class="rows name">
+					<input type="text" class="impor" name="name" id="name" placeholder="이름을 입력하세요." onblur="checkFn('name')">
+					<span class="check"></span>
+				</div>
+				<div class="rows h">
+					<label for="birth1">생년월일</label>
+				</div>
+				<div class="rows">
+					<input type="text" class="birth" name="birth1" id="birth1" placeholder="년(4자)" maxlength="4">&nbsp;
+					<select class="birth2" name="birth2">
+						<option value="0">월</option>
+						<option value="1">1월</option>
+						<option value="2">2월</option>
+						<option value="3">3월</option>
+						<option value="4">4월</option>
+						<option value="5">5월</option>
+						<option value="6">6월</option>
+						<option value="7">7월</option>
+						<option value="8">8월</option>
+						<option value="9">9월</option>
+						<option value="10">10월</option>
+						<option value="11">11월</option>
+						<option value="12">12월</option>
+					</select>&nbsp;
+					<input type="text" class="birth" name="birth3" id="birth3" placeholder="일">
+				</div>
+				<div class="rows h">
+					<label for="gender">성별</label>
+				</div>
+				<div class="rows">
+					<input type="radio" name="gender" id="gender" value="m">남자
+					<input type="radio" name="gender" value="f">여자
+				</div>
+				<div class="rows h">
+					<label for="email">이메일<span class="red">*</span></label>
+				</div>
+				<div class="rows email">
+					<input type="email" class="impor" name="email" id="email" placeholder="이메일을 입력하세요" onblur="checkFn('email')">
+					<span class="check"></span>
+				</div>
+				<div class="rows h">
+					<label for="phone1">연락처<span class="red">*</span></label>
+				</div>
+				<div class="rows phone">
+					<select name="phone1" id="phone1">
+						<option value="010">010</option>
+						<option value="010">011</option>
+						<option value="010">016</option>
+					</select>&nbsp;
+					<input type="text" class="impor" name="phone2" id="phone2" placeholder="연락처2" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" onblur="checkFn('phone2')">&nbsp;
+					<input type="text" class="impor" name="phone3" id="phone3" placeholder="연락처3" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" onblur="checkFn('phone3')">
+					<span class="check"></span>
+				</div>
+				<div class="rows">
+					<label>
+						<input type="submit" value="회원가입" onclick="sumbitFn();return false;">
+					</label>
+				</div>
+			</form>
+		</section>
+	</body>
+</html>
